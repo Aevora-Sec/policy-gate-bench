@@ -119,6 +119,35 @@ Full definitions, corpus schema, and the obfuscation taxonomy are in
 3. We publish weaknesses (see `obf_bypass_rate`).
 4. A number is always reported with its **corpus SHA-256 and date**.
 
+## Bonus: is the engine actually self-improving? (capability, not activity)
+
+Most "self-improving AI" tracks **activity** — how many evolution cycles ran, how big
+the knowledge base grew. Activity is not capability. A loop can spin, a KB can grow,
+and real detection capability can stay flat or *regress*.
+
+[`capability_ledger.py`](capability_ledger.py) measures the thing that matters: your
+benchmark's capability metrics (block-rate / FP / obf-bypass / recall) as a **time
+series across generations**, and reports — honestly — whether each is **compounding,
+flat, or regressing**. It compares **like-for-like only** (same benchmark + config +
+malicious-corpus SHA), so a corpus swap can't fake a regression; FP metrics flag
+`confounded-benign-changed` when the control set changed.
+
+```bash
+python capability_ledger.py --results example_results
+```
+
+```
+  policy_gate  [v1-regex]  set=demo-malic
+     ^ clear_block_rate      0.82 -> 1.0   (improving, n=3)
+     ^ obf_bypass_rate       0.95 -> 0.62  (improving, n=3)
+     v latency_ms_p95        0.5  -> 0.67  (regressing, n=3)
+  OVERALL: COMPOUNDING — capability measurably improves across generations
+```
+
+Point `--results` at your own folder of result JSONs (re-run `policy_bench.py` across
+engine versions and it accumulates). A measured "flat" beats an unmeasured
+"it's self-improving!" — that honesty *is* the proof.
+
 ## Not in this repo (by design)
 
 - The **production policy engine** (part of the Aevora platform).

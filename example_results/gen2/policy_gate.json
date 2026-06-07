@@ -1,0 +1,18 @@
+{
+  "benchmark": "policy_gate",
+  "engine": "v1-regex",
+  "timestamp": "2026-02-01T00:00:00+00:00",
+  "corpus": {
+    "malicious_sha256": "demo-malicious-corpus-frozen-v1",
+    "benign_sha256": "demo-benign-corpus-frozen-v1",
+    "malicious_rows": 72,
+    "benign_rows": 100
+  },
+  "metrics": {
+    "clear_block_rate": 0.91,
+    "block_rate": 0.68,
+    "obf_bypass_rate": 0.80,
+    "fp_rate": 0.0,
+    "latency_ms_p95": 0.60
+  }
+}
